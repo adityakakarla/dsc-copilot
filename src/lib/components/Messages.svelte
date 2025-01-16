@@ -1,13 +1,11 @@
 <script>
 	import Message from './Message.svelte';
-	import Message2 from './Message2.svelte';
-	import Message3 from './Message3.svelte';
 	let { messages, loading } = $props();
 </script>
 
 <div class="flex w-full max-w-[700px] flex-col space-y-4 text-sm">
 	{#each messages as message, i}
-			<Message3 {message} />
+			<Message {message} />
 	{/each}
 	{#if loading === true}
     <div class='flex items-center self-start mr-10 w-fit rounded-lg border border-slate-300 p-3'>
