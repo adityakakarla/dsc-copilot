@@ -61,7 +61,7 @@
 			<button
 				class="rounded-lg bg-purple-700 px-4 py-2 text-white transition duration-100 ease-in-out hover:bg-purple-500"
 				><a
-					href={`https://buy.stripe.com/test_3cs3eDbQU2XJdNK001?client_reference_id=${user?.id}`}
+					href={`https://buy.stripe.com/3cs7sF9lQgS21bOeUW?client_reference_id=${user?.id}`}
 					target="_blank">Get 10x Higher Usage</a
 				></button
 			>
