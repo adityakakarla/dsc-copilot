@@ -3,7 +3,7 @@
 	let { messages, loading } = $props();
 </script>
 
-<div class="flex flex-col items-center w-[90%] max-w-[1100px] space-y-4 text-sm">
+<div class="flex flex-col items-center w-[90%] max-w-[900px] space-y-4 text-sm">
 	{#each messages as message, i}
 			<Message {message} />
 	{/each}

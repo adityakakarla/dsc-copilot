@@ -8,7 +8,7 @@
 	let codeBlockIndex = 0;
 	
 	// Process the message content
-	message.content.split('\n').forEach((line) => {
+	message.content.split('\n').forEach((line: any) => {
 	  if (line.trim().startsWith('```')) {
 		if (isCodeBlock) {
 		  formattedContent.push({ type: 'code', content: codeBlock, index: codeBlockIndex++ });
