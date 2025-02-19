@@ -38,7 +38,7 @@
 
 {#if form?.success}
 <h2 class='text-4xl mt-20'>Thanks for signing up.</h2>
-<p class='mt-6'>There is a chance you may not receive the email.</p>
+<p class='mt-6'>Should be getting an email soon, but there's a chance you don't.</p>
 <p>This means you either already have an account or there was an error.</p>
 {:else}
 

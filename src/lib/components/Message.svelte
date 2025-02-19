@@ -1,6 +1,5 @@
 <script lang="ts">
-	import { Clipboard } from 'lucide-svelte';
-	
+	import { Clipboard, Check } from 'lucide-svelte';
 	let { message } = $props();
 	let formattedContent = $state<any[]>([]);
 	let copiedIndex = $state<null | number>(null);
@@ -64,34 +63,38 @@
 		setTimeout(() => (copiedIndex = null), 2000);
 	  });
 	}
-	</script>
-	
-	<div class="flex {message.role === 'user' ? 'justify-end' : 'justify-start'}">
-	  <div class="max-w-[90%] rounded-lg border border-slate-300 p-3">
-		{#each formattedContent as block}
-		  {#if block.type === 'code'}
-			<div class="code-block-container border border-slate-300 rounded-sm">
-			  <pre><code>{block.content}</code></pre>
-			  <button class="copy-button" onclick={() => copyToClipboard(block.content, block.index)}>
+  </script>
+  
+  <div class="flex w-full {message.role === 'user' ? 'justify-end' : 'justify-start'}">
+	<div class="w-fit max-w-[90%] rounded-lg border border-slate-300 p-3">
+	  {#each formattedContent as block}
+		{#if block.type === 'code'}
+		  <div class="code-block-container border border-slate-300 rounded-sm">
+			<pre><code>{block.content}</code></pre>
+			<button class="copy-button" onclick={() => copyToClipboard(block.content, block.index)}>
+			  {#if copiedIndex === block.index}
+				<span class="copied-text">Copied</span>
+			  {:else}
 				<Clipboard size="12" />
-			  </button>
-			</div>
-		  {:else if block.type === 'line'}
-			<p class="text-block">
-			  {#each block.segments as segment}
-				{#if segment.type === 'inline-code'}
-					<code class='inline-code-block'>{segment.content}</code>
-				{:else}
-				  <span>{segment.content}</span>
-				{/if}
-			  {/each}
-			</p>
-		  {/if}
-		{/each}
-	  </div>
+			  {/if}
+			</button>
+		  </div>
+		{:else if block.type === 'line'}
+		  <p class="text-block">
+			{#each block.segments as segment}
+			  {#if segment.type === 'inline-code'}
+				<code class='inline-code-block'>{segment.content}</code>
+			  {:else}
+				<span>{segment.content}</span>
+			  {/if}
+			{/each}
+		  </p>
+		{/if}
+	  {/each}
 	</div>
-	
-	<style>
+  </div>
+  
+  <style>
 	.code-block-container {
 	  position: relative;
 	  margin: 0.5rem 0;
@@ -122,6 +125,15 @@
 	  background-color: white;
 	  border: 1px solid #e5e7eb;
 	  border-radius: 0.375rem;
+	  display: flex;
+	  align-items: center;
+	  justify-content: center;
+	  min-width: 50px;
+	}
+	
+	.copied-text {
+	  font-size: 10px;
+	  font-weight: 500;
 	}
 	
 	.copy-button:hover {
@@ -170,4 +182,4 @@
 	.inline-copy-button:hover {
 	  opacity: 1 !important;
 	}
-	</style>
+  </style>
