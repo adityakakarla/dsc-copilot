@@ -1,38 +1,17 @@
-# sv
+# DSC Copilot
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+DSC Copilot is my attempt to build [v0.dev](http://v0.dev) for UCSD students.
 
-## Creating a project
+# The Problem
 
-If you're seeing this, you've probably already done this step. Congrats!
+UCSD data science courses often require niche requirements. For instance, DSC 10 uses babypandas (an easier version of pandas) and DSC 20/30 have a heavy emphasis on style.
 
-```bash
-# create a new project in the current directory
-npx sv create
+Normal chatbots can be prompt engineered to capture this, but it can be an annoying process. In some cases (ex: when using Claude), messing around with prompts to get the right answer can make you hit rate limits.
 
-# create a new project in my-app
-npx sv create my-app
-```
+# The Solution
 
-## Developing
+A chatbot where prompts are auto-assigned based on the requested course. Yes, this is "just a GPT wrapper." Still cool nonetheless.
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+# Tech Stuff
 
-```bash
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
-
-## Building
-
-To create a production version of your app:
-
-```bash
-npm run build
-```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+Learned a ton about managing test vs prod environments for Stripe and Supabase. Also hit some weird SvelteKit bugs that took quite a few 2:00 AM commits to fix.
