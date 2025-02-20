@@ -15,7 +15,7 @@ export const actions = {
 
         const pastMessages = await supabase
             .from('messages')
-            .select('*', {count: 'exact'})
+            .select('*', { count: 'exact' })
             .gte('created_at', new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString())
         if (pastMessages.error) {
             console.error('Error fetching messages count:', pastMessages.error)
@@ -25,7 +25,7 @@ export const actions = {
         }
         const numMessages = pastMessages.count
 
-        const subscription = await supabase.from('subscriptions').select('*', {count: 'exact'})
+        const subscription = await supabase.from('subscriptions').select('*', { count: 'exact' })
         const isSubscribed = (subscription.count as number) > 0
         if (subscription.error) {
             console.error('Error fetching subscription data:', subscription.error)
@@ -34,18 +34,56 @@ export const actions = {
             }
         }
 
-        if (!isSubscribed && (numMessages ?? 0) >= 10){
+        if (!isSubscribed && (numMessages ?? 0) >= 10) {
             return {
                 message: "You have exceeded your limits. Please try again later or upgrade to premium."
             }
-        } else if(isSubscribed && (numMessages ?? 0) >= 100){
-            return{
+        } else if (isSubscribed && (numMessages ?? 0) >= 100) {
+            return {
                 message: "You have exceeded your limits. Please try again later."
             }
         }
 
+        let conversation_id
+
+        if (messages.length == 1) {
+            const { data, error } = await supabase
+                .from('messages')
+                .select('conversation_id')
+                .order('conversation_id', { ascending: false })
+                .limit(1);
+
+            if (error) {
+                console.error('Error fetching highest conversation_id:', error);
+            }
+
+            if(!data){
+                conversation_id = 0
+            } else if (!data[0]){
+                conversation_id = 0
+            } else if (!data[0].conversation_id){
+                conversation_id = 0
+            } else {
+                conversation_id = data[0].conversation_id + 1
+            }      
+        } else {
+            const { data, error } = await supabase
+                .from('messages')
+                .select('conversation_id')
+                .order('conversation_id', { ascending: false })
+                .limit(1);
+
+            if (error) {
+                console.error('Error fetching highest conversation_id:', error);
+            }
+
+            conversation_id = data![0].conversation_id
+        }
+
         const { error } = await supabase.from('messages').insert({
-            user_id
+            user_id,
+            message: messages[messages.length - 1].content,
+            conversation_id
         })
         if (error) {
             console.error(error)
@@ -53,20 +91,26 @@ export const actions = {
 
         const message = await handleMessages(messages, course)
 
+        await supabase.from('messages').insert({
+            user_id,
+            message: message,
+            conversation_id
+        })
+
         return {
             message
         }
     }
 }
 
-async function handleMessages(messages: {role: "user" | "assistant", content:string}[], course: string){
+async function handleMessages(messages: { role: "user" | "assistant", content: string }[], course: string) {
     const anthropic = new Anthropic({
         apiKey: ANTHROPIC_API_KEY
     })
 
     let system;
 
-    switch (course){
+    switch (course) {
         case "DSC 10":
             system = `
 You are a tutor of DSC 10 at UC San Diego.

@@ -20,7 +20,6 @@ export const actions: Actions = {
     const subscriptionId = formData.get('subscriptionId') as string
     const stripe = new Stripe(STRIPE_SECRET_KEY)
     const list = await stripe.subscriptions.list()
-    console.log(list)
     const subscription = await stripe.subscriptions.cancel(subscriptionId)
     const {error} = await supabase.from('subscriptions').delete().eq('subscription', subscriptionId)
     if(error){

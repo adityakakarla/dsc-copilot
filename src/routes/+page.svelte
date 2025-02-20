@@ -29,7 +29,6 @@
  loading = true
  return async ({result}: any) => {
  messages.push({role: "assistant", content: result.data.message})
- console.log(messages)
  loading = false
   };
   }

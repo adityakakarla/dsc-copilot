@@ -40,7 +40,6 @@ export async function POST(event: RequestEvent) {
   switch (eventType) {
     case 'checkout.session.completed':
       const checkoutSession = data.object
-      console.log(checkoutSession)
       //@ts-expect-error
       const user_id = checkoutSession.client_reference_id
       //@ts-expect-error
